@@ -1,51 +1,216 @@
-# 项目结构
+## 场景
+
+在不改变代码的情况实现mock或部分mock
+
+
+
+例如: 
+
+1. 三方数据服务,比如支付或者数据报告查询等,在实际测试中,有些接口的测试环境不会一直开放,而且需要模拟各种场景,以实现场景覆盖
+2. 有部分接口没有完成,但是不能影响主线流程,这个时候需要实现部分mock
+3. 单元测试,上下游的接口没有完成,不想改变feign的代码
+
+
+
+与开源项目`mockserver`比较
+
+√ 更容易上手
+
+√ 支持nacos,可实现0改变代码
+
+
+
+## 服务架构
+
+![nacos-mock](README/nacos-mock-17223396410705.png)
+
+
+
+## 快速开始
+
+```sh
+git clone https://gitee.com/zwbsxwt/nacos-mock.git
+
+cd docker
+
+unzip mock-console.zip
+
+docker-compose up -d
+```
+
+
+
+docker安装方式可参考`常见问题`一栏
+
+
+
+
+
+## 使用方法
+
+访问`3901`端口,登录即可
+
+admin
+
+123456
+
+![image-20240730175840477](README/image-20240730175840477.png)
+
+
+
+**假设需要mock `crm` 服务**
+
+![image-20240730180553155](README/image-20240730180553155.png)
+
+
+
+添加mock服务及nacos信息(以下只是示例,请根据实际情况填入)
+
+![image-20240730180909219](README/image-20240730180909219.png)
+
+`端口管理`  配置端口号,这里是通过ng监听不同`端口`分发不同`服务名`
+
+![image-20240730181401510](README/image-20240730181401510.png)
+
+
+
+`服务管理`
+
+![image-20240730190939851](README/image-20240730190939851.png)
+
+mock管理
+
+![image-20240730191145202](README/image-20240730191145202.png)
+
+
+
+
+
+如果需要某些条件才能mock时,需要添加逻辑表达,命中才会返回
+
+采用的是谷歌`aviator`表达式,可自行百度,很好上手
+
+![image-20240730191432187](README/image-20240730191432187.png)
+
+
+
+
+
+返回报文用的`freemark`,同时也支持将用户参数直接返回(也是从get/post/path三大约定变量直接取)
+
+![image-20240730195020608](README/image-20240730195020608.png)
+
+
+
+## 测试
+
+请注意,如果是代码中,直接测试即可,**不需要**改为url形式!!!
+
+请注意,如果是代码中,直接测试即可,**不需要**改为url形式!!!
+
+请注意,如果是代码中,直接测试即可,**不需要**改为url形式!!!
+
+
+
+如果是网关,直接拼上服务名即可,这里用`crm`举个例子
+
+例如 (xxx是你gateway的地址)
+
+````
+http://xxxx/crm/api/user
+````
+
+
+
+
+
+以下采用url形式测试,只是方便做示例
+
+
+
+注意:这里逻辑表达限定了为张三
+
+![image-20240730200321247](README/image-20240730200321247.png)
+
+如果改为其它参数则会匹配不上,比如改为赵六,不符合`get.name=='张三'`限定 , 匹配不上会显示`No match! No forward!`
+
+![image-20240730200336743](README/image-20240730200336743.png)
+
+
+
+## 任务进度
+
+- [x] nacos服务管理
+- [x] api-mock
+- [x] 端口管理
+- [ ] 触发回调
+
+
+
+
+
+
+
+## 项目结构
 
 
 
 ## mock-console
 
-后端管理接口,改的eladmin
+后台管理项目,改的eladmin, 感谢大神的开源项目
+
+原始项目地址
+
+```
+https://github.com/elunez/eladmin
+```
 
 
 
 ## mock-console-ui
 
-UI界面
+MOCK的UI界面
 
 
 
 ## mock-server
 
-mockServer服务代码
+mockServer服务代码,相对简单,用兴趣同学可以看一看
 
 
 
-## docker-compose.zip
-
-docker配置文件及数据
+## 常见问题
 
 
 
+优先用docker安装,**原始项目可能有部分数据脚本还未来得及完善**
 
 
 
-
-# 使用方式
-
-
-
-安装docker以及docker-compose组件
+### docker安装
 
 
 
-`ubuntu`为例
+`windows` 和 `mac`
+
+直接下载安装即可
 
 ```
-# 一键化指令
+https://www.docker.com/products/docker-desktop/
+```
+
+
+
+
+
+`ubuntu`
+
+```
+# 获得管理权限
 sudo -i 
 
 # docker
-apt update -y && \
+apt update -y 
 apt install docker.io -y && \
 apt install docker -y 
 
@@ -64,18 +229,89 @@ docker-compose -v
 
 
 
+`centos`
 
+```
+
+sudo yum update -y
+
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+yum-config-manager \
+    --add-repo \
+    https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+
+sudo yum install -y docker-ce docker-ce-cli containerd.io
+
+
+sudo systemctl start docker
+
+# 检查版本
+docker -v
+
+# docker-compose
+git clone https://gitee.com/zwbsxwt/docker-compose.git && \
+cd docker-compose && \
+mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose && \
+chmod +x /usr/local/bin/docker-compose
+
+
+
+# 检查版本
+docker-compose -v
+```
+
+
+
+
+
+有的同学可能git也不会装
+
+```sh
+# windows和mac下载安装即可 (自行百度)
+
+# ubuntu
+sudo apt install git -y
+
+# centos 
+sudo yum install git -y
+```
+
+
+
+
+
+快速启动
 
 ```agsl
+git clone https://gitee.com/zwbsxwt/nacos-mock.git
+
 cd docker
 
-# 解压`docker-compose.zip`
-unzip docker-compose.zip
-
-cd mock
+unzip mock-console.zip
 
 docker-compose up -d
 ```
 
 
 
+
+
+关于method
+
+GET/POST是不同类型的请求,同学不要搞混了,意思就是如果你设定是个POST请求,用GET形式是访问不到的
+
+
+
+
+
+
+
+## 捐赠
+
+开源不易,请作者喝杯咖啡吧
+
+
+
+![1722338893220](README/1722338893220.png)
