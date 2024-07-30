@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mh.mock.mapper.NacosMockServerMapper">
+    <resultMap id="BaseResultMap" type="com.mh.mock.domain.NacosMockServer">
+        <id column="id" property="id"/>
+        <result column="service_name" property="serviceName"/>
+        <result column="nacos_url" property="nacosUrl"/>
+        <result column="namespace_show_name" property="namespaceShowName"/>
+        <result column="namespace_id" property="namespaceId"/>
+        <result column="mock_server_id" property="mockServerId"/>
+        <result column="mock_server_ip" property="mockServerIp"/>
+        <result column="mock_server_port" property="mockServerPort"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, service_name, nacos_url, namespace_show_name, namespace_id, mock_server_id, mock_server_ip,mock_server_port
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mock_server.nacos_mock_server
+        <where>
+        </where>
+        order by id desc
+    </select>
+</mapper>

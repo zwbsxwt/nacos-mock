@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mh.mock.mapper.MockEndpointMapper">
+    <resultMap id="BaseResultMap" type="com.mh.mock.domain.MockEndpoint">
+        <id column="id" property="id"/>
+        <result column="mock_name" property="mockName"/>
+        <result column="service_name" property="serviceName"/>
+        <result column="method" property="method"/>
+        <result column="url_pattern" property="urlPattern"/>
+        <result column="expression" property="expression"/>
+        <result column="response_template" property="responseTemplate"/>
+        <result column="response_header" property="responseHeader"/>
+        <result column="remark" property="remark"/>
+        <result column="weight" property="weight"/>
+        <result column="is_open" property="isOpen"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, mock_name, is_open,service_name, method, url_pattern, expression, response_template, response_header, remark, weight, create_time
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mock_server.mock_endpoint
+        <where>
+            <if test="criteria.serviceName != null">
+                and service_name = #{criteria.serviceName}
+            </if>
+        </where>
+        order by id desc
+    </select>
+</mapper>
