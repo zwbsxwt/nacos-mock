@@ -20,9 +20,21 @@
 
 
 
-## 服务架构
+## 任务进度 (TODO)
 
-![nacos-mock](README/nacos-mock-17223396410705.png)
+- [x] Nacos 服务管理
+- [x]  API Mock
+- [x]  支持多场景路由（相同 URL，根据逻辑判断，返回不同的 Mock 数据）
+- [x]  端口管理（管理 ng）
+- [x]  支持请求参数（GET/POST/PATH），可直接插入返回模板
+- [x]  支持 XML（参数可以从 POST 中获取，等同于 JSON）
+- [ ]  触发回调
+
+
+
+## 技术架构图
+
+![架构图](README/架构图-172239049804410.png)
 
 
 
@@ -30,6 +42,8 @@
 
 ```sh
 git clone https://gitee.com/zwbsxwt/nacos-mock.git
+
+cd nacos-mock
 
 cd docker
 
@@ -135,15 +149,6 @@ http://xxxx/crm/api/user
 如果改为其它参数则会匹配不上,比如改为赵六,不符合`get.name=='张三'`限定 , 匹配不上会显示`No match! No forward!`
 
 ![image-20240730200336743](README/image-20240730200336743.png)
-
-
-
-## 任务进度
-
-- [x] nacos服务管理
-- [x] api-mock
-- [x] 端口管理
-- [ ] 触发回调
 
 
 
